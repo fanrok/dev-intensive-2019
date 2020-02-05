@@ -31,14 +31,14 @@ class User(
     }
 
     data class Builder(
-        var id: String,
-        var firstName: String?,
-        var lastName: String?,
-        var avatar: String?,
-        var rating: Int,
-        var respect: Int,
-        var lastVisit: Date?,
-        var isOnline: Boolean) {
+        var id: String = "1",
+        var firstName: String? = null,
+        var lastName: String? = null,
+        var avatar: String? = null,
+        var rating: Int = 0,
+        var respect: Int = 0,
+        var lastVisit: Date? = Date(),
+        var isOnline: Boolean = false) {
         fun id(id: String) = apply { this.id = id }
         fun firstName(firstName: String?) = apply { this.firstName = firstName }
         fun lastName(lastName: String?) = apply { this.lastName = lastName }
