@@ -84,22 +84,12 @@ object Utils {
     }
 
     fun transliteration(payload: String, divider: String = " "): String {
-
-        val (first, last) = parseFullName(payload, divider)
-        val firstTranslit: String = translitWord(first)
-        val lastTranslit: String = translitWord(last)
-        return "$firstTranslit$divider$lastTranslit"
-    }
-
-    fun translitWord(s: String?): String {
         var out: String = ""
-        if (s !== null) {
-            for (char in s) {
-                if (mapTranslit.containsKey("$char")) {
-                    out += mapTranslit.getValue("$char")
-                } else {
-                    out += char
-                }
+        for (char in payload) {
+            out += when {
+                mapTranslit.containsKey("$char") -> mapTranslit.getValue("$char")
+                char == ' ' -> divider
+                else -> char
             }
         }
         return out

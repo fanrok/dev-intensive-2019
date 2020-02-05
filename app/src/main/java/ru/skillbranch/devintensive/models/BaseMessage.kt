@@ -24,17 +24,17 @@ abstract class BaseMessage(
             lastId++
             return when (type) {
                 "image" -> ImageMessage(
-                    "$lastId",
-                    from,
-                    chat,
+                    id="$lastId",
+                    from=from,
+                    chat=chat,
                     date = date,
                     image = payload as String,
                     isIncoming = isIncoming
                 )
                 else -> TextMessage(
-                    "$lastId",
-                    from,
-                    chat,
+                    id="$lastId",
+                    from=from,
+                    chat=chat,
                     date = date,
                     text = payload as String,
                     isIncoming = isIncoming
