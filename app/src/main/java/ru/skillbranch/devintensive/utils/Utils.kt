@@ -83,7 +83,7 @@ object Utils {
         return Pair(firstName, lastName)
     }
 
-    fun transliteration(payload: String, devider: String = " "): String {
+    fun transliteration(payload: String = " ", devider: String = " "): String {
 
         val (first, last) = parseFullName(payload, devider)
         val firstTranslit: String = translitWord(first)

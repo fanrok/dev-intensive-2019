@@ -39,19 +39,26 @@ fun Date.humanizeDiff(date: Date = Date()): String {
     val days = hours / 24
     if (flag) {
         str = when {
-
-            seconds < 60 -> "только что"
-            minutes < 60 -> "через ${TimeUnits.MINUTE.plural(minutes.toInt())}"
-            hours < 24 -> "через ${TimeUnits.HOUR.plural(hours.toInt())}"
-            days < 365 -> "через ${TimeUnits.DAY.plural(days.toInt())}"
+            seconds <= 1 -> "только что"
+            seconds <= 45 -> "через несколько секунд"
+            seconds <= 75 -> "через минуту"
+            minutes <= 45 -> "через ${TimeUnits.MINUTE.plural(minutes.toInt())}"
+            minutes <= 75 -> "через час"
+            hours < 22 -> "через ${TimeUnits.HOUR.plural(hours.toInt())}"
+            hours < 26 -> "через день"
+            days < 360 -> "через ${TimeUnits.DAY.plural(days.toInt())}"
             else -> "более чем через год"
         }
     } else {
         str = when {
-            seconds < 60 -> "только что"
-            minutes < 60 -> "${TimeUnits.MINUTE.plural(minutes.toInt())} назад"
-            hours < 24 -> "${TimeUnits.HOUR.plural(hours.toInt())} назад"
-            days < 365 -> "${TimeUnits.DAY.plural(days.toInt())} назад"
+            seconds <= 1 -> "только что"
+            seconds <= 45 -> "несколько секунд назад"
+            seconds <= 75 -> "минуту назад"
+            minutes <= 45 -> "${TimeUnits.MINUTE.plural(minutes.toInt())} назад"
+            minutes <= 75 -> "час назад"
+            hours < 22 -> "${TimeUnits.HOUR.plural(hours.toInt())} назад"
+            hours < 26 -> "день назад"
+            days < 360 -> "${TimeUnits.DAY.plural(days.toInt())} назад"
             else -> "более года назад"
         }
     }
