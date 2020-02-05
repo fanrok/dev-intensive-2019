@@ -21,10 +21,6 @@ class User(
         avatar = null
     )
 
-    init {
-        println("$id $firstName $lastName $avatar $rating $respect $lastVisit $isOnline")
-    }
-
     companion object Factory {
         private var lastId: Int = -1
         fun makeUser(fullName: String?): User {
