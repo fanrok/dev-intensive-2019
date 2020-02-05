@@ -51,6 +51,6 @@ class User(
         fun respect(respect: Int) = apply { this.respect = respect }
         fun lastVisit(lastVisit: Date) = apply { this.lastVisit = lastVisit }
         fun isOnline(isOnline: Boolean) = apply { this.isOnline = isOnline }
-        fun build() = User(id, firstName, lastName, avatar, rating, respect, lastVisit, isOnline)
+        fun build() = User(id=id, firstName=firstName, lastName=lastName, avatar=avatar, rating=rating, respect=respect, lastVisit=lastVisit, isOnline=isOnline)
     }
 }

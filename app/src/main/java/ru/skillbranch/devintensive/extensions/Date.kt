@@ -29,7 +29,7 @@ fun Date.add(value: Int, units: TimeUnits = TimeUnits.SECOND): Date {
 }
 
 fun Date.humanizeDiff(date: Date = Date()): String {
-    var str: String = ""
+    val str: String
     var difference = date.time - this.time
     val flag = difference < 0
     difference = abs(difference)
@@ -38,28 +38,21 @@ fun Date.humanizeDiff(date: Date = Date()): String {
     val hours = minutes / 60
     val days = hours / 24
     if (flag) {
-        if (seconds < 60) {
-            str = "через ${TimeUnits.SECOND.plural(seconds.toInt())}"
-        } else if (minutes < 60) {
-            str = "через ${TimeUnits.MINUTE.plural(minutes.toInt())}"
-        } else if (hours < 24) {
-            str = "через ${TimeUnits.HOUR.plural(hours.toInt())}"
-        } else if (days < 366) {
-            str = "через ${TimeUnits.DAY.plural(days.toInt())}"
-        } else {
-            str = "более чем через год"
+        str = when {
+
+            seconds < 60 -> "только что"
+            minutes < 60 -> "через ${TimeUnits.MINUTE.plural(minutes.toInt())}"
+            hours < 24 -> "через ${TimeUnits.HOUR.plural(hours.toInt())}"
+            days < 365 -> "через ${TimeUnits.DAY.plural(days.toInt())}"
+            else -> "более чем через год"
         }
     } else {
-        if (seconds < 60) {
-            str = "${TimeUnits.SECOND.plural(seconds.toInt())} назад"
-        } else if (minutes < 60) {
-            str = "${TimeUnits.MINUTE.plural(minutes.toInt())} назад"
-        } else if (hours < 24) {
-            str = "${TimeUnits.HOUR.plural(hours.toInt())} назад"
-        } else if (days < 366) {
-            str = "${TimeUnits.DAY.plural(days.toInt())} назад"
-        } else {
-            str = "более года назад"
+        str = when {
+            seconds < 60 -> "только что"
+            minutes < 60 -> "${TimeUnits.MINUTE.plural(minutes.toInt())} назад"
+            hours < 24 -> "${TimeUnits.HOUR.plural(hours.toInt())} назад"
+            days < 365 -> "${TimeUnits.DAY.plural(days.toInt())} назад"
+            else -> "более года назад"
         }
     }
     return str
