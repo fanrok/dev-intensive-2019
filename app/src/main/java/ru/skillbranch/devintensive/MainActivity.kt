@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.skillbranch.devintensive.models.Bender
 import ru.skillbranch.devintensive.extensions.hideKeyboard
+import ru.skillbranch.devintensive.extensions.isKeyboardClosed
+import ru.skillbranch.devintensive.extensions.isKeyboardOpen
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -48,10 +50,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         sendBtn.setOnClickListener(this)
 
         messageEt.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
+
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 hideKeyboard()
                 sendBtn.callOnClick()
-                Log.i("INFO", "Here you can write the code")
                 return@OnEditorActionListener true
             }
             false
