@@ -17,7 +17,7 @@ fun Activity.isKeyboardOpen(): Boolean {
     this.window.decorView.getWindowVisibleDisplayFrame(r)
     val winHeight: Int = this.window.decorView.height
     val keyHeight: Int = winHeight - r.bottom
-    return winHeight > keyHeight * 0.15
+    return keyHeight > 150//при открытой клаве keyHeight 984 при закрытой 144. не лучший метод для определения.
 }
 
 

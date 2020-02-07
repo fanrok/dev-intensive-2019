@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         textTxt.text = benderObj.askQuestion()
 
         sendBtn.setOnClickListener(this)
+
         messageEt.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
 
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -71,7 +72,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        Log.d("M_isKeyboardOpen","${if(isKeyboardOpen())"да" else "нет"}")
+
         outState?.putString("STATUS", benderObj.status.name)
         outState?.putString("QUESTION", benderObj.question.name)
         Log.d("M_MainActivity","onSaveInstanceState ${benderObj.status.name} ${benderObj.question.name}")
