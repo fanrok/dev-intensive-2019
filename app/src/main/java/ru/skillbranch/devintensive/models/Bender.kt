@@ -13,13 +13,17 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
     }
 
     fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
-        val validTrue = when (question) {
-            Question.NAME -> answer[0] == answer[0].toUpperCase()
-            Question.PROFESSION -> answer[0] == answer[0].toLowerCase()
-            Question.MATERIAL -> answer.matches("^\\D*$".toRegex())
-            Question.BDAY -> answer.matches("[0-9]*".toRegex())
-            Question.SERIAL -> answer.matches("[0-9]*".toRegex()) && answer.length == 7
-            Question.IDLE -> true
+        val validTrue = if(answer.isNotEmpty()) {
+            when (question) {
+                Question.NAME -> answer[0] == answer[0].toUpperCase()
+                Question.PROFESSION -> answer[0] == answer[0].toLowerCase()
+                Question.MATERIAL -> answer.matches("^\\D*$".toRegex())
+                Question.BDAY -> answer.matches("[0-9]*".toRegex())
+                Question.SERIAL -> answer.matches("[0-9]*".toRegex()) && answer.length == 7
+                Question.IDLE -> true
+            }
+        }else{
+            false
         }
         val str: String
         if (validTrue) {
