@@ -49,7 +49,7 @@ class CircleImageView @JvmOverloads constructor(
     }
 
     fun setBorderColor(hex: String) {
-        cv_borderColor = hex.toInt(16)
+        cv_borderColor = hex.toInt()
     }
 
     fun setBorderColor(@ColorRes colorId: Int) {
@@ -67,7 +67,7 @@ class CircleImageView @JvmOverloads constructor(
 
         paint.color = cv_borderColor
         paint.style = Paint.Style.STROKE
-        paint.strokeWidth = cv_borderWidth.toFloat()
+        paint.strokeWidth = cv_borderWidth
 
         canvas.drawCircle(width/2f, width/2f, radius-cv_borderWidth, paint)
     }
