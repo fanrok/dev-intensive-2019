@@ -20,7 +20,7 @@ class CircleImageView @JvmOverloads constructor(
 
     companion object {
         private const val DEFAULT_BORDER_COLOR = Color.WHITE
-        private const val DEFAULT_BORDER_WIDTH = 2
+        private const val DEFAULT_BORDER_WIDTH = 2f
     }
 
     private var cv_borderColor = DEFAULT_BORDER_COLOR
@@ -30,17 +30,17 @@ class CircleImageView @JvmOverloads constructor(
         val a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView)
         cv_borderColor =
             a.getColor(R.styleable.CircleImageView_cv_borderColor, DEFAULT_BORDER_COLOR)
-        cv_borderWidth = a.getInt(R.styleable.CircleImageView_cv_borderWidth, DEFAULT_BORDER_WIDTH)
+        cv_borderWidth = a.getDimension(R.styleable.CircleImageView_cv_borderWidth, DEFAULT_BORDER_WIDTH)
     }
 
     @Dimension
     fun getBorderWidth(): Int {
 
-        return cv_borderWidth
+        return cv_borderWidth.toInt()
     }
 
     fun setBorderWidth(@Dimension dp: Int) {
-        cv_borderWidth = dp
+        cv_borderWidth = dp.toFloat()
     }
 
     fun getBorderColor(): Int {
@@ -49,11 +49,11 @@ class CircleImageView @JvmOverloads constructor(
     }
 
     fun setBorderColor(hex: String) {
-        cv_borderWidth = hex.toInt(16)
+        cv_borderColor = hex.toInt(16)
     }
 
     fun setBorderColor(@ColorRes colorId: Int) {
-        cv_borderWidth = colorId
+        cv_borderColor = colorId
     }
 
     override fun onDraw(canvas: Canvas) {
