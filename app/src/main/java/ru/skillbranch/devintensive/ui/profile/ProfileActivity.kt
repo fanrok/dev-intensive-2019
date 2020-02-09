@@ -4,6 +4,9 @@ import android.graphics.ColorFilter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -22,6 +25,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     var isEditMode = false
+    var errorRepo = false
     private lateinit var viewModel: ProfileViewModel
     lateinit var viewFields: Map<String, TextView>
 
@@ -83,6 +87,9 @@ class ProfileActivity : AppCompatActivity() {
         isEditMode = savedInstanceState?.getBoolean(IS_EDIT_MODE, false) ?: false
         showCurrentMode(isEditMode)
         btn_edit.setOnClickListener {
+            if(errorRepo){
+                et_repository.text.clear()
+            }
             if(isEditMode) saveProfileInfo()
             isEditMode = !isEditMode
             showCurrentMode(isEditMode)
@@ -91,6 +98,48 @@ class ProfileActivity : AppCompatActivity() {
         btn_switch_theme.setOnClickListener{
             viewModel.switchTheme()
         }
+
+        et_repository.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+                if(s.length != 0){
+                    val str = s.toString()
+                    errorRepo = when{
+                        str.contains("enterprise")->true
+                        str.contains("features")->true
+                        str.contains("topics")->true
+                        str.contains("collections")->true
+                        str.contains("trending")->true
+                        str.contains("events")->true
+                        str.contains("marketplace")->true
+                        str.contains("pricing")->true
+                        str.contains("nonprofit")->true
+                        str.contains("customer-stories")->true
+                        str.contains("security")->true
+                        str.contains("login")->true
+                        str.contains("join")->true
+                        else -> false
+                    }
+                    if(!errorRepo){
+                        errorRepo = str.matches("^(((https://)?(www.)?)(github.com/)([A-z0-9-]{1,256})/?)\$".toRegex())
+                    }
+                    wr_repository.isErrorEnabled = errorRepo
+                    wr_repository.error = if (errorRepo) "Невалидный адрес репозитория" else ""
+                }else{
+                    errorRepo = false
+                }
+                Log.d("M_TextChage","text change $s")
+            }
+        })
     }
 
     private fun showCurrentMode(isEdit: Boolean) {
