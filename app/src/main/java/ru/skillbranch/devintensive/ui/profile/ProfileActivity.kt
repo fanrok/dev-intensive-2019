@@ -1,5 +1,6 @@
 package ru.skillbranch.devintensive.ui.profile
 
+import android.graphics.Color
 import android.graphics.ColorFilter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -7,6 +8,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -16,6 +18,8 @@ import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_profile.*
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.Profile
+import ru.skillbranch.devintensive.ui.custom.TextToDraw
+import ru.skillbranch.devintensive.utils.Utils
 import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
 
 
@@ -43,7 +47,7 @@ class ProfileActivity : AppCompatActivity() {
         outState.putBoolean(IS_EDIT_MODE, isEditMode)
     }
 
-    private fun initViewModel(){
+    private fun initViewModel() {
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModel.getProfileData().observe(this, Observer { updateUI(it) })
         viewModel.getTheme().observe(this, Observer { updateTheme(it) })
@@ -54,14 +58,35 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun updateUI(profile: Profile) {
-        profile.toMap().also{
-            for ((k, v) in viewFields){
+        profile.toMap().also {
+            for ((k, v) in viewFields) {
                 v.text = it[k].toString()
             }
         }
+        setAva(profile)
     }
 
-    private fun saveProfileInfo(){
+    private fun setAva(profile: Profile) {
+        val initials = Utils.toInitials(profile.firstName, profile.lastName)
+        if (initials != null) {
+            val tv = TypedValue()
+            theme.resolveAttribute(R.attr.colorAccent, tv, true)
+
+            val ava = TextToDraw(
+                iv_avatar.layoutParams.width,
+                iv_avatar.layoutParams.height,
+                initials,
+                Utils.convertSpToPx(this, 48),
+                Color.WHITE,
+                tv.data
+            )
+            iv_avatar.setImageBitmap(ava.draw())
+        } else {
+            iv_avatar.setImageResource(R.drawable.avatar_default)
+        }
+    }
+
+    private fun saveProfileInfo() {
         Profile(
             firstName = et_first_name.text.toString(),
             lastName = et_last_name.text.toString(),
@@ -87,15 +112,15 @@ class ProfileActivity : AppCompatActivity() {
         isEditMode = savedInstanceState?.getBoolean(IS_EDIT_MODE, false) ?: false
         showCurrentMode(isEditMode)
         btn_edit.setOnClickListener {
-            if(errorRepo){
+            if (errorRepo) {
                 et_repository.text.clear()
             }
-            if(isEditMode) saveProfileInfo()
+            if (isEditMode) saveProfileInfo()
             isEditMode = !isEditMode
             showCurrentMode(isEditMode)
         }
 
-        btn_switch_theme.setOnClickListener{
+        btn_switch_theme.setOnClickListener {
             viewModel.switchTheme()
         }
 
@@ -112,35 +137,35 @@ class ProfileActivity : AppCompatActivity() {
                 before: Int, count: Int
             ) {
 
-                if(s.length != 0){
+                if (s.length != 0) {
                     val str = s.toString()
-                    errorRepo = when{
-                        str.contains("enterprise")->true
-                        str.contains("features")->true
-                        str.contains("topics")->true
-                        str.contains("collections")->true
-                        str.contains("trending")->true
-                        str.contains("events")->true
-                        str.contains("marketplace")->true
-                        str.contains("pricing")->true
-                        str.contains("nonprofit")->true
-                        str.contains("customer-stories")->true
-                        str.contains("security")->true
-                        str.contains("login")->true
-                        str.contains("join")->true
+                    errorRepo = when {
+                        str.contains("enterprise") -> true
+                        str.contains("features") -> true
+                        str.contains("topics") -> true
+                        str.contains("collections") -> true
+                        str.contains("trending") -> true
+                        str.contains("events") -> true
+                        str.contains("marketplace") -> true
+                        str.contains("pricing") -> true
+                        str.contains("nonprofit") -> true
+                        str.contains("customer-stories") -> true
+                        str.contains("security") -> true
+                        str.contains("login") -> true
+                        str.contains("join") -> true
                         else -> false
                     }
-                    if(!errorRepo){
-                        errorRepo = !str.matches("^(((https://)?(www.)?)(github.com/)([A-z0-9-]{1,256})/?)\$".toRegex())
+                    if (!errorRepo) {
+                        errorRepo =
+                            !str.matches("^(((https://)?(www.)?)(github.com/)([A-z0-9-]{1,256})/?)\$".toRegex())
                     }
                     wr_repository.isErrorEnabled = errorRepo
                     wr_repository.error = if (errorRepo) "Невалидный адрес репозитория" else ""
-                }else{
+                } else {
                     errorRepo = false
                     wr_repository.isErrorEnabled = errorRepo
                     wr_repository.error = ""
                 }
-                Log.d("M_TextChage","text change $s")
             }
         })
     }

@@ -125,5 +125,9 @@ object Utils {
         return (dp * context.resources.displayMetrics.density).roundToInt()
     }
 
+    fun convertSpToPx(context: Context, sp: Int): Int {
+        return sp * context.resources.displayMetrics.scaledDensity.roundToInt()
+    }
+
 
 }
