@@ -111,6 +111,7 @@ class ProfileActivity : AppCompatActivity() {
                 s: CharSequence, start: Int,
                 before: Int, count: Int
             ) {
+
                 if(s.length != 0){
                     val str = s.toString()
                     errorRepo = when{
@@ -130,12 +131,14 @@ class ProfileActivity : AppCompatActivity() {
                         else -> false
                     }
                     if(!errorRepo){
-                        errorRepo = str.matches("^(((https://)?(www.)?)(github.com/)([A-z0-9-]{1,256})/?)\$".toRegex())
+                        errorRepo = !str.matches("^(((https://)?(www.)?)(github.com/)([A-z0-9-]{1,256})/?)\$".toRegex())
                     }
                     wr_repository.isErrorEnabled = errorRepo
                     wr_repository.error = if (errorRepo) "Невалидный адрес репозитория" else ""
                 }else{
                     errorRepo = false
+                    wr_repository.isErrorEnabled = errorRepo
+                    wr_repository.error = ""
                 }
                 Log.d("M_TextChage","text change $s")
             }

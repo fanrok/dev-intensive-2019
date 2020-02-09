@@ -2,16 +2,24 @@ package ru.skillbranch.devintensive.ui.custom
 
 import android.content.Context
 import android.graphics.*
+import android.graphics.Bitmap.Config
+import android.graphics.PorterDuff.Mode
 import android.graphics.drawable.BitmapDrawable
 import android.util.AttributeSet
+import android.view.View
 import android.widget.ImageView
+import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.Dimension
+import androidx.annotation.Dimension.DP
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
+import ru.skillbranch.devintensive.App
 import ru.skillbranch.devintensive.R
+import ru.skillbranch.devintensive.utils.Utils
+import kotlin.math.min
 
-/**
- * Реализуй CustomView с названием класса CircleImageView и кастомными xml атрибутами cv_borderColor (цвет границы (format="color") по умолчанию white) и cv_borderWidth (ширина границы (format="dimension") по умолчанию 2dp). CircleImageView должна превращать установленное изображение в круглое изображение с цветной рамкой, у CircleImageView должны быть реализованы методы @Dimension getBorderWidth():Int, setBorderWidth(@Dimension dp:Int), getBorderColor():Int, setBorderColor(hex:String), setBorderColor(@ColorRes colorId: Int). Используй CircleImageView как ImageView для аватара пользователя (@id/iv_avatar)
- */
+
 class CircleImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -20,27 +28,37 @@ class CircleImageView @JvmOverloads constructor(
 
     companion object {
         private const val DEFAULT_BORDER_COLOR = Color.WHITE
-        private const val DEFAULT_BORDER_WIDTH = 2f
     }
 
     private var cv_borderColor = DEFAULT_BORDER_COLOR
-    private var cv_borderWidth = DEFAULT_BORDER_WIDTH
+    private var cv_borderWidth = Utils.convertDpToPx(context, 2F)
+    private var borderPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var circlePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val srcMode = PorterDuffXfermode(Mode.SRC)
+    private val srcInMode = PorterDuffXfermode(Mode.SRC_IN)
 
     init {
-        val a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView)
-        cv_borderColor =
-            a.getColor(R.styleable.CircleImageView_cv_borderColor, DEFAULT_BORDER_COLOR)
-        cv_borderWidth = a.getDimension(R.styleable.CircleImageView_cv_borderWidth, DEFAULT_BORDER_WIDTH)
+        if (attrs!=null) {
+            val a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView)
+            cv_borderColor =
+                a.getColor(R.styleable.CircleImageView_cv_borderColor, DEFAULT_BORDER_COLOR)
+            cv_borderWidth =
+                a.getDimensionPixelSize(R.styleable.CircleImageView_cv_borderWidth, cv_borderWidth)
+            a.recycle()
+        }
+        borderPaint.style = Paint.Style.STROKE
+        setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     }
 
     @Dimension
     fun getBorderWidth(): Int {
 
-        return cv_borderWidth.toInt()
+        return Utils.convertPxToDp(context, cv_borderWidth)
     }
 
     fun setBorderWidth(@Dimension dp: Int) {
-        cv_borderWidth = dp.toFloat()
+        cv_borderWidth = Utils.convertDpToPx(context, dp.toFloat())
+        this.invalidate()
     }
 
     fun getBorderColor(): Int {
@@ -49,46 +67,49 @@ class CircleImageView @JvmOverloads constructor(
 
     fun setBorderColor(hex: String) {
         cv_borderColor = Color.parseColor(hex)
+        this.invalidate()
     }
 
     fun setBorderColor(@ColorRes colorId: Int) {
-        cv_borderColor = colorId
+        cv_borderColor = ContextCompat.getColor(App.applicationContext(), colorId)
+        this.invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {
         drawRound(canvas)
-        drawStroke(canvas)
-    }
-
-    private fun drawStroke(canvas: Canvas) {
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        val radius = width / 2f
-
-        paint.color = cv_borderColor
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = cv_borderWidth
-
-        canvas.drawCircle(width/2f, width/2f, radius-cv_borderWidth, paint)
     }
 
     private fun drawRound(canvas: Canvas) {
-        val b: Bitmap = (drawable as BitmapDrawable).bitmap
-        val bitmap = b.copy(Bitmap.Config.ARGB_8888, true)
+        if (width == 0 || height == 0) return
+        val bitmap = getBitmapFromDrawable(width, height) ?: return
 
-        val scaledBitmap: Bitmap
-        val ratio: Float = bitmap.width.toFloat() / bitmap.height.toFloat()
-        val height: Int = Math.round(width / ratio)
-        scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false)
+        val halfWidth = width / 2F
+        val halfHeight = height / 2F
+        val radius = min(halfWidth, halfHeight)
 
-        val shader: Shader
-        shader = BitmapShader(scaledBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        circlePaint.xfermode = srcMode
+        canvas.drawCircle(halfWidth, halfHeight, radius, circlePaint)
+        circlePaint.xfermode = srcInMode
+        canvas.drawBitmap(bitmap, 0F, 0F, circlePaint)
 
-        val rect = RectF()
-        rect.set(0f, 0f, width.toFloat(), height.toFloat())
+        if (cv_borderWidth > 0) {
+            borderPaint.color = cv_borderColor
+            borderPaint.strokeWidth = cv_borderWidth.toFloat()
+            canvas.drawCircle(halfWidth, halfHeight, radius - cv_borderWidth / 2, borderPaint)
+        }
+    }
 
-        val imagePaint = Paint()
-        imagePaint.isAntiAlias = true
-        imagePaint.shader = shader
-        canvas.drawRoundRect(rect, width.toFloat(), height.toFloat(), imagePaint)
+    private fun getBitmapFromDrawable(width: Int, height: Int): Bitmap? {
+        if (drawable == null)
+            return null
+
+        if (drawable is BitmapDrawable)
+            return (drawable as BitmapDrawable).bitmap
+
+        val bmp =  drawable.toBitmap(width, height, Config.ARGB_8888)
+        val canvas = Canvas(bmp)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        return bmp
     }
 }
