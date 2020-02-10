@@ -113,3 +113,15 @@ enum class TimeUnits {
 
     abstract fun plural(i: Int): String
 }
+
+fun Date.shortFormat():String{
+    val pattern = if(this.isSameDate(Date())) "HH:mm" else "dd.MM.yy"
+    return this.format(pattern)
+}
+
+fun Date.isSameDate(date: Date):Boolean{
+    val day1 = this.time / DAY
+    val day2 = date.time / DAY
+
+    return  day1 == day2
+}
