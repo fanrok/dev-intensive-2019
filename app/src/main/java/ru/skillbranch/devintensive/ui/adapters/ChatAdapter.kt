@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_chat_group.*
 import kotlinx.android.synthetic.main.item_chat_single.*
@@ -80,9 +81,13 @@ class ChatAdapter(val listener: (ChatItem) -> Unit) :
         ItemTouchViewHoilder {
         override fun bind(item: ChatItem, listener: (ChatItem) -> Unit) {
             if(item.avatar == null) {
+                Glide.with(itemView)
+                    .clear(iv_avatar_single)
                 iv_avatar_single.setInitials(item.initials)
             }else{
-                //TODO set draweble
+                Glide.with(itemView)
+                    .load(item.avatar)
+                    .into(iv_avatar_single)
             }
             tv_title_single.text = item.shortDescription
 
