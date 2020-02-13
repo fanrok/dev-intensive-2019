@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_chat_group.*
 import kotlinx.android.synthetic.main.item_chat_single.*
 import kotlinx.android.synthetic.main.item_user_list.*
 import ru.skillbranch.devintensive.R
@@ -27,11 +28,11 @@ class UserAdapter(val listener: (UserItem) -> Unit) :
             if(user.avatar == null) {
                 Glide.with(itemView)
                     .clear(iv_avatar_user)
-                iv_avatar_single.setInitials(user.initials ?: "??")
+                iv_avatar_user.setInitials(user.initials ?: "??")
             }else{
                 Glide.with(itemView)
                     .load(user.avatar)
-                    .into(iv_avatar_single)
+                    .into(iv_avatar_user)
             }
             sv_indicator2.visibility = if (user.isOnline) View.VISIBLE else View.GONE
             tv_user_name.text = user.fullName

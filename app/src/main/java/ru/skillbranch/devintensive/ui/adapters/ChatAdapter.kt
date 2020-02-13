@@ -78,7 +78,7 @@ class ChatAdapter(val listener: (ChatItem) -> Unit) :
     }
 
     inner class SingleViewHolder(convertView: View) : ChatItemViewHolder(convertView),
-        ItemTouchViewHoilder {
+        ItemTouchViewHolder {
         override fun bind(item: ChatItem, listener: (ChatItem) -> Unit) {
             if(item.avatar == null) {
                 Glide.with(itemView)
@@ -120,7 +120,7 @@ class ChatAdapter(val listener: (ChatItem) -> Unit) :
     }
 
     inner class GroupViewHolder(convertView: View) : ChatItemViewHolder(convertView),
-        ItemTouchViewHoilder {
+        ItemTouchViewHolder {
         override fun bind(item: ChatItem, listener: (ChatItem) -> Unit) {
             iv_avatar_group.setInitials(item.initials)
             tv_title_group.text = item.shortDescription

@@ -1,7 +1,6 @@
-package ru.skillbranch.devintensive.models
+package ru.skillbranch.devintensive.models.data
 
 import ru.skillbranch.devintensive.extensions.humanizeDiff
-import ru.skillbranch.devintensive.models.data.UserItem
 import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
 
@@ -45,7 +44,12 @@ data class User(
         fun makeUser(fullName: String?): User {
             lastId++
             val (firstName, lastName) = Utils.parseFullName(fullName)
-            return User(id = "$lastId", firstName = firstName, lastName = lastName, avatar = null)
+            return User(
+                id = "$lastId",
+                firstName = firstName,
+                lastName = lastName,
+                avatar = null
+            )
         }
     }
 

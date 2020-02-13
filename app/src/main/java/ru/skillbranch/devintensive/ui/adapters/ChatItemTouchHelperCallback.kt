@@ -23,7 +23,8 @@ class ChatItemTouchHelperCallback(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
     ): Int {
-        return if (viewHolder is ItemTouchHelper) {
+//        Log.d("M_ItemTouchHelper","${viewHolder is ItemTouchHelper}")
+        return if (viewHolder is ItemTouchViewHolder) {
             makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.START)
         } else {
             makeFlag(ItemTouchHelper.ACTION_STATE_IDLE, ItemTouchHelper.START)
@@ -44,7 +45,7 @@ class ChatItemTouchHelperCallback(
 
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
 
-        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE && viewHolder is ItemTouchViewHoilder) {
+        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE && viewHolder is ItemTouchViewHolder) {
             viewHolder.onItemSelected()
         }
 
@@ -52,7 +53,7 @@ class ChatItemTouchHelperCallback(
     }
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
-        if (viewHolder is ItemTouchViewHoilder) viewHolder.onItemCleared()
+        if (viewHolder is ItemTouchViewHolder) viewHolder.onItemCleared()
         super.clearView(recyclerView, viewHolder)
     }
 
@@ -108,7 +109,7 @@ class ChatItemTouchHelperCallback(
     }
 }
 
-interface ItemTouchViewHoilder {
+interface ItemTouchViewHolder {
     fun onItemSelected()
     fun onItemCleared()
 }
