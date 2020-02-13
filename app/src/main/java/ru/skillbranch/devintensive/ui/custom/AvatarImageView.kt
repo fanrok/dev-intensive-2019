@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.annotation.ColorInt
@@ -19,7 +18,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.toRectF
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import ru.skillbranch.devintensive.R
-import ru.skillbranch.devintensive.extentions.dpToPx
+import ru.skillbranch.devintensive.extensions.dpToPx
 import kotlin.math.max
 
 class AvatarImageView @JvmOverloads constructor(
