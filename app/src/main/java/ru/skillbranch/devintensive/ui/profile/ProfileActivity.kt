@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_profile.*
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.Profile
-import ru.skillbranch.devintensive.ui.custom.TextToDraw
+//import ru.skillbranch.devintensive.ui.custom.TextToDraw
 import ru.skillbranch.devintensive.utils.Utils
 import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
 
@@ -72,15 +72,15 @@ class ProfileActivity : AppCompatActivity() {
             val tv = TypedValue()
             theme.resolveAttribute(R.attr.colorAccent, tv, true)
 
-            val ava = TextToDraw(
-                iv_avatar.layoutParams.width,
-                iv_avatar.layoutParams.height,
-                initials,
-                Utils.convertSpToPx(this, 48),
-                Color.WHITE,
-                tv.data
-            )
-            iv_avatar.setImageBitmap(ava.draw())
+//            val ava = TextToDraw(
+//                iv_avatar.layoutParams.width,
+//                iv_avatar.layoutParams.height,
+//                initials,
+//                Utils.convertSpToPx(this, 48),
+//                Color.WHITE,
+//                tv.data
+//            )
+//            iv_avatar.setImageBitmap(ava.draw())
         } else {
             iv_avatar.setImageResource(R.drawable.avatar_default)
         }
