@@ -6,7 +6,7 @@ import ru.skillbranch.devintensive.models.data.User
 import ru.skillbranch.devintensive.models.data.Chat
 import ru.skillbranch.devintensive.utils.DataGenerator
 
-object CacheManagers {
+object CacheManager {
     private val chats = mutableLiveData(DataGenerator.stabChats)
     private val users = mutableLiveData(DataGenerator.stabUsers)
 
