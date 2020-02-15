@@ -1,4 +1,4 @@
-package ru.skillbranch.devintensive.utils
+package ru.skillbranch.devintensive.ui.custom
 
 import android.animation.ValueAnimator
 import android.content.Context
@@ -117,7 +117,9 @@ class AvatarImageView @JvmOverloads constructor(
 
     override fun onSaveInstanceState(): Parcelable? {
         val savedState =
-            SavedState(super.onSaveInstanceState())
+            SavedState(
+                super.onSaveInstanceState()
+            )
         with(savedState) {
             ssIsAvatarMode = isAvatarMode
             ssBorderWidth = borderWidth
