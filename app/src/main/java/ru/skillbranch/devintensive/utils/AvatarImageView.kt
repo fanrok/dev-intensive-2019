@@ -1,4 +1,4 @@
-package ru.skillbranch.devintensive.ui.custom
+package ru.skillbranch.devintensive.utils
 
 import android.animation.ValueAnimator
 import android.content.Context
@@ -116,7 +116,8 @@ class AvatarImageView @JvmOverloads constructor(
     }
 
     override fun onSaveInstanceState(): Parcelable? {
-        val savedState = SavedState(super.onSaveInstanceState())
+        val savedState =
+            SavedState(super.onSaveInstanceState())
         with(savedState) {
             ssIsAvatarMode = isAvatarMode
             ssBorderWidth = borderWidth
@@ -274,7 +275,10 @@ class AvatarImageView @JvmOverloads constructor(
         override fun describeContents() = 0
 
         companion object CREATOR : Parcelable.Creator<SavedState> {
-            override fun createFromParcel(parcel: Parcel) = SavedState(parcel)
+            override fun createFromParcel(parcel: Parcel) =
+                SavedState(
+                    parcel
+                )
             override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls(size)
         }
     }
